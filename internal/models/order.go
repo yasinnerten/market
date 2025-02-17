@@ -2,14 +2,24 @@ package models
 
 import (
 	"gorm.io/gorm"
-	"time"
 )
 
 type Order struct {
 	gorm.Model
-	UserID    uint      `gorm:"not null" json:"user_id"`
-	ProductID uint      `gorm:"not null" json:"product_id"`
-	Quantity  int       `gorm:"not null" json:"quantity"`
-	Total     float64   `gorm:"not null" json:"total"`
-	CreatedAt time.Time `json:"created_at"`
+	UserID      uint        `json:"user_id"`
+	User        User        `json:"user"`
+	Items       []OrderItem `json:"items"`
+	TotalAmount float64     `json:"total_amount"`
+	Status      string      `json:"status" gorm:"default:pending"`
+	Address     string      `json:"address"`
+	PaymentID   string      `json:"payment_id"`
+}
+
+type OrderItem struct {
+	gorm.Model
+	OrderID   uint    `json:"order_id"`
+	ProductID uint    `json:"product_id"`
+	Product   Product `json:"product"`
+	Quantity  int     `json:"quantity"`
+	Price     float64 `json:"price"`
 }
