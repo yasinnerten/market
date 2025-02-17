@@ -7,14 +7,17 @@ Phase 1: Initial Setup
 Set up the Go project with Gin/Echo
 Define the database schema (GORM)
 Implement authentication (JWT)
+
 Phase 2: Core E-commerce Features
 
 Product listing, cart, and checkout system
 Payment gateway integration
+
 Phase 3: Admin Panel & Enhancements
 
 Add an admin dashboard for managing products/orders
 Implement search & filtering
+
 Phase 4: Optimization & Deployment
 
 Optimize DB queries, caching with Redis
