@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: market-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: market
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
