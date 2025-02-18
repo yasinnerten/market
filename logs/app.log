@@ -1,0 +1,33 @@
+{"level":"info","ts":1739845675.0681853,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845675.5066938,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845675.9864326,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845676.6586967,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845677.7151937,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845679.5915337,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845683.1419973,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845689.7890592,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845702.8524997,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845728.7389576,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845780.204654,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845826.5308578,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845826.957364,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845827.4170182,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845828.0734212,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845829.139713,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845831.0111394,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845834.4352834,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845841.1353996,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845854.204187,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845880.0613942,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845942.1303544,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739845942.1658602,"caller":"logger/logger.go:38","msg":"Connected to database successfully"}
+{"level":"info","ts":1739846243.682002,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739846243.7194805,"caller":"logger/logger.go:38","msg":"Connected to database successfully"}
+{"level":"info","ts":1739847513.153652,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739847513.2049482,"caller":"logger/logger.go:38","msg":"Connected to database successfully"}
+{"level":"info","ts":1739848016.822149,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739848016.858008,"caller":"logger/logger.go:38","msg":"Connected to database successfully"}
+{"level":"info","ts":1739848445.6574914,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739848445.7121696,"caller":"logger/logger.go:38","msg":"Connected to database successfully"}
+{"level":"info","ts":1739873083.3240623,"caller":"logger/logger.go:38","msg":"Connecting to database","host":"market-postgres-1","port":"5432","database":"market"}
+{"level":"info","ts":1739873083.37773,"caller":"logger/logger.go:38","msg":"Connected to database successfully"}
