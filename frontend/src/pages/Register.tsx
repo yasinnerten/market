@@ -30,6 +30,7 @@ const Register = () => {
       navigate('/')
     } catch (err: any) {
       setError(err.message || 'Failed to create account')
+    } finally {
       setLoading(false)
     }
   }

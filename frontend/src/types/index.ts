@@ -28,8 +28,8 @@ export interface AuthResponse {
 }
 
 // Product related interfaces
-export interface Product extends BaseModel {
-  image: any
+export interface Product {
+  id: number
   name: string
   description: string
   price: number
@@ -81,23 +81,18 @@ export interface Order extends BaseModel {
 export type OrderStatus = 'pending' | 'processing' | 'completed' | 'cancelled'
 
 // Admin related interfaces
+interface TopProduct extends Product {
+  sold: number
+  revenue: number
+}
+
 export interface Analytics extends BaseModel {
   totalRevenue: number
   totalOrders: number
   averageOrderSize: number
-  dailyRevenue: Array<{
-    date: string
-    revenue: number
-  }>
-  topProducts: Array<{
-    product: Product
-    sold: number
-    revenue: number
-  }>
-  recentOrders: Array<{
-    order: Order
-    user: User
-  }>
+  dailyRevenue: { date: string; revenue: number }[]
+  topProducts: TopProduct[]
+  recentOrders: Order[]
 }
 
 export interface Banner extends BaseModel {

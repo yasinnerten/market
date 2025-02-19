@@ -139,7 +139,6 @@ TODO: File Storage: AWS S3
 TODO: Task Queue: Celery, RabbitMQ, or Kafka (for order processing, emails, etc.)
 
 ## Deployment & Infrastructure
-Docker : 
 TODO: GitLab CI/CD: Automating deployment
 TODO: Nginx or Traefik: Reverse proxy & load balancing
 TODO: Cloud Providers: AWS

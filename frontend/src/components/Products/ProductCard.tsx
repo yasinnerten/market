@@ -15,7 +15,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <Link to={`/products/${product.id}`}>
         <img
-          src={product.image || '/placeholder.png'}
+          src={product.imageUrl || '/placeholder.png'}
           alt={product.name}
           className="w-full h-48 object-cover"
         />

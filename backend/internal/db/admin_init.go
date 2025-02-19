@@ -1,61 +1,45 @@
 package db
 
 import (
-	"fmt"
 	"os"
 
+	"github.com/yasinnerten/market/internal/logger"
 	"github.com/yasinnerten/market/internal/model"
+	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
 func InitializeAdmin(db *gorm.DB) error {
 	var count int64
-	if err := db.Model(&model.User{}).Where("is_admin = ?", true).Count(&count).Error; err != nil {
-		return fmt.Errorf("failed to check admin existence: %w", err)
+	if err := db.Model(&model.User{}).Where("role = ?", "admin").Count(&count).Error; err != nil {
+		logger.Error("Failed to check admin existence", zap.Error(err))
+		return nil // Don't fail the application, just log the error
 	}
 
 	if count > 0 {
 		return nil // Admin already exists
 	}
 
+	// Create admin user
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(os.Getenv("ADMIN_PASSWORD")), bcrypt.DefaultCost)
 	if err != nil {
-		return fmt.Errorf("failed to hash admin password: %w", err)
+		logger.Error("Failed to hash password", zap.Error(err))
+		return nil
 	}
 
 	admin := model.User{
+		Name:     os.Getenv("ADMIN_NAME"),
 		Email:    os.Getenv("ADMIN_EMAIL"),
 		Password: string(hashedPassword),
-		Name:     "Admin User",
-		IsAdmin:  true,
+		Role:     "admin",
 	}
 
 	if err := db.Create(&admin).Error; err != nil {
-		return fmt.Errorf("failed to create admin user: %w", err)
+		logger.Error("Failed to create admin user", zap.Error(err))
+		return nil
 	}
 
-	return nil
-}
-
-func CreateAdminUser() error {
-	var count int64
-	DB.Model(&model.User{}).Where("is_admin = ?", true).Count(&count)
-
-	if count == 0 {
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte("admin123"), bcrypt.DefaultCost)
-		if err != nil {
-			return err
-		}
-
-		admin := model.User{
-			Email:    "admin@gmail.com",
-			Password: string(hashedPassword),
-			Name:     "Admin User",
-			IsAdmin:  true,
-		}
-
-		return DB.Create(&admin).Error
-	}
+	logger.Info("Admin user created successfully")
 	return nil
 }

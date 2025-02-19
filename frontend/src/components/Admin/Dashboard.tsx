@@ -9,28 +9,12 @@ import {
     ResponsiveContainer,
 } from 'recharts';
 import { endpoints } from '@/services/api';
-
-// interface Product {
-//     id: number;
-//     name: string;
-//     sold: number;
-//     revenue: number;
-//     imageUrl: string;
-// }
-
-// interface Order {
-//     id: number;
-//     userEmail: string;
-//     total: number;
-//     status: string;
-//     createdAt: string;
-// }
+import { Analytics, ApiResponse } from '@/types';
 
 export default function Dashboard() {
-    const { data: analytics, isLoading } = useQuery({
+    const { data: analytics, isLoading } = useQuery<ApiResponse<Analytics>>({
         queryKey: ['admin-analytics'],
-        queryFn: () => endpoints.admin.getAnalytics().then(res => res.data),
-        refetchInterval: 300000, // Refresh every 5 minutes
+        queryFn: () => endpoints.admin.getAnalytics().then(res => res.data)
     });
 
     if (isLoading) return <div>Loading...</div>;
@@ -82,15 +66,15 @@ export default function Dashboard() {
                             </tr>
                         </thead>
                         <tbody>
-                            {analytics?.data?.topProducts.map((product) => (
-                                <tr key={product.product.id} className="border-b">
+                            {analytics?.data.topProducts.map((product) => (
+                                <tr key={product.id} className="border-b">
                                     <td className="py-2 flex items-center">
                                         <img
-                                            src={product.product.imageUrl}
-                                            alt={product.product.name}
+                                            src={product.imageUrl}
+                                            alt={product.name}
                                             className="w-8 h-8 object-cover rounded mr-2"
                                         />
-                                        {product.product.name}
+                                        {product.name}
                                     </td>
                                     <td className="text-right py-2">{product.sold}</td>
                                     <td className="text-right py-2">${product.revenue.toFixed(2)}</td>
@@ -116,22 +100,22 @@ export default function Dashboard() {
                             </tr>
                         </thead>
                         <tbody>
-                            {analytics?.data?.recentOrders.map((order) => (
-                                <tr key={order.order.id} className="border-b">
-                                    <td className="py-2">#{order.order.id}</td>
-                                    <td className="py-2">{order.order.user_email}</td>
-                                    <td className="text-right py-2">${order.order.total.toFixed(2)}</td>
+                            {analytics?.data.recentOrders.map((order) => (
+                                <tr key={order.id} className="border-b">
+                                    <td className="py-2">#{order.id}</td>
+                                    <td className="py-2">{order.user_email}</td>
+                                    <td className="text-right py-2">${order.total.toFixed(2)}</td>
                                     <td className="text-center py-2">
                                         <span className={`px-2 py-1 rounded-full text-xs ${
-                                            order.order.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                            order.order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                            order.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                            order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                                             'bg-red-100 text-red-800'
                                         }`}>
-                                            {order.order.status}
+                                            {order.status}
                                         </span>
                                     </td>
                                     <td className="text-right py-2">
-                                        {new Date(order.order.createdAt).toLocaleDateString()}
+                                        {new Date(order.createdAt).toLocaleDateString()}
                                     </td>
                                 </tr>
                             ))}

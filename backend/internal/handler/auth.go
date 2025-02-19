@@ -3,7 +3,6 @@ package handler
 import (
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
@@ -35,28 +34,25 @@ type RegisterRequest struct {
 }
 
 func (h *AuthHandler) Login(c *gin.Context) {
-	var req LoginRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
+	var loginReq LoginRequest
+	if err := c.ShouldBindJSON(&loginReq); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	var user model.User
-	if err := h.db.Where("email = ?", req.Email).First(&user).Error; err != nil {
-		logger.Error("Login failed: user not found", zap.String("email", req.Email))
+	if err := h.db.Where("email = ?", loginReq.Email).First(&user).Error; err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
-		logger.Error("Login failed: invalid password", zap.String("email", req.Email))
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginReq.Password)); err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
 
 	token, err := middleware.GenerateToken(user.ID)
 	if err != nil {
-		logger.Error("Failed to generate token", zap.Error(err))
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
 	}
@@ -67,6 +63,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 			"id":    user.ID,
 			"email": user.Email,
 			"name":  user.Name,
+			"role":  user.Role,
 		},
 	})
 }
@@ -121,13 +118,32 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	})
 }
 
-func generateToken(userID uint) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": userID,
-		"exp":     time.Now().Add(time.Hour * 24).Unix(),
-	})
+// func generateToken(userID uint) (string, error) {
+// 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+// 		"user_id": userID,
+// 		"exp":     time.Now().Add(time.Hour * 24).Unix(),
+// 	})
 
-	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+// 	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+// }
+
+func (h *AuthHandler) Me(c *gin.Context) {
+	// Get user from context (set by AuthRequired middleware)
+	userInterface, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
+		return
+	}
+
+	user, ok := userInterface.(*model.User)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user type"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"user": user,
+	})
 }
 
 // AuthMiddleware verifies the JWT token

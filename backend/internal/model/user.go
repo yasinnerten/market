@@ -2,19 +2,17 @@ package model
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type User struct {
-	gorm.Model
-	Email     string    `gorm:"uniqueIndex:idx_users_email;type:varchar(255)"`
-	Password  string    `gorm:"type:varchar(255)"`
-	Name      string    `gorm:"type:varchar(100)"`
-	IsAdmin   bool      `gorm:"default:false"`
-	Role      string    `gorm:"default:user" json:"role"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID        uint       `json:"id" gorm:"primaryKey"`
+	Email     string     `json:"email" gorm:"unique;not null"`
+	Password  string     `json:"-" gorm:"not null"`
+	Role      string     `json:"role" gorm:"default:user"`
+	Name      string     `json:"name"`
+	CreatedAt time.Time  `json:"created_at" gorm:"default:CURRENT_TIMESTAMP"`
+	UpdatedAt time.Time  `json:"updated_at" gorm:"default:CURRENT_TIMESTAMP"`
+	DeletedAt *time.Time `json:"-" gorm:"index"`
 }
 
 // For user registration

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -18,22 +19,37 @@ func NewProductHandler(db *gorm.DB) *ProductHandler {
 	return &ProductHandler{db: db}
 }
 
+// List returns all products
 func (h *ProductHandler) List(c *gin.Context) {
 	var products []model.Product
-	if err := h.db.Find(&products).Error; err != nil {
+
+	query := h.db.Order("created_at DESC")
+
+	// Add search functionality
+	if search := c.Query("search"); search != "" {
+		query = query.Where("name ILIKE ? OR description ILIKE ?", "%"+search+"%", "%"+search+"%")
+	}
+
+	if err := query.Find(&products).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch products"})
 		return
 	}
+
 	c.JSON(http.StatusOK, products)
 }
 
+// Get returns a single product
 func (h *ProductHandler) Get(c *gin.Context) {
-	id := c.Param("id")
 	var product model.Product
-	if err := h.db.First(&product, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Product not found"})
+	if err := h.db.First(&product, c.Param("id")).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Product not found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch product"})
 		return
 	}
+
 	c.JSON(http.StatusOK, product)
 }
 

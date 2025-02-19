@@ -68,7 +68,7 @@ export default function ProductManagement() {
                                         <div className="h-10 w-10 flex-shrink-0">
                                             <img
                                                 className="h-10 w-10 rounded-full object-cover"
-                                                src={product.image || '/placeholder.png'}
+                                                src={product.imageUrl || '/placeholder.png'}
                                                 alt={product.name}
                                             />
                                         </div>

@@ -1,10 +1,9 @@
 import { useState } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 
-const Login = () => {
+export default function Login() {
   const navigate = useNavigate()
-  const location = useLocation()
   const { login } = useAuth()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -20,10 +19,10 @@ const Login = () => {
 
     try {
       await login(email, password)
-      const from = (location.state as any)?.from?.pathname || '/'
-      navigate(from, { replace: true })
-    } catch (err) {
-      setError('Invalid email or password')
+      navigate('/')
+    } catch (err: any) {
+      setError(err.message || 'Invalid email or password')
+    } finally {
       setLoading(false)
     }
   }
@@ -46,6 +45,7 @@ const Login = () => {
           <input
             type="email"
             name="email"
+            id="email"
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
           />
@@ -58,6 +58,7 @@ const Login = () => {
           <input
             type="password"
             name="password"
+            id="password"
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
           />
@@ -80,6 +81,4 @@ const Login = () => {
       </p>
     </div>
   )
-}
-
-export default Login 
+} 

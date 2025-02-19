@@ -28,7 +28,7 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
                 description: product.description,
                 price: product.price,
                 stock: product.stock,
-                image: product.image,
+                imageUrl: product.imageUrl,
                 category: product.category
             });
         }

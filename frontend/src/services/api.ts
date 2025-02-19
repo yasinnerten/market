@@ -2,21 +2,22 @@ import axios from 'axios'
 import type { 
   User,
   Product,
-  Order,
   ApiResponse,
-  Analytics,
-  Banner,
-  ProductQueryParams,
   ApiError,
   LoginInput,
   RegisterInput,
-  CartItem,
-  Category
+  Category,
+  Banner,
+  Order,
+  Analytics,
+  AuthResponse
 } from '@/types'
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api'
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json'
   }
@@ -42,17 +43,21 @@ api.interceptors.response.use(
 
 export const endpoints = {
   auth: {
-    login: (credentials: LoginInput) =>
-      api.post<ApiResponse<{ token: string; user: User }>>('/auth/login', credentials),
-    register: (data: RegisterInput) =>
-      api.post<ApiResponse<{ token: string; user: User }>>('/auth/register', data),
-    me: () => 
-      api.get<ApiResponse<User>>('/auth/me')
+    login: (data: LoginInput) => 
+      api.post<ApiResponse<AuthResponse>>('/auth/login', data),
+    register: (data: RegisterInput) => 
+      api.post<ApiResponse<AuthResponse>>('/auth/register', data),
+    logout: () => {
+      localStorage.removeItem('token');
+      return api.post('/auth/logout');
+    },
+    me: () => api.get<ApiResponse<User>>('/auth/me'),
   },
 
   products: {
-    getAll: (params?: ProductQueryParams) =>
-      api.get<ApiResponse<Product[]>>('/products', { params }),
+    getAll: () =>
+      api.get<ApiResponse<Product[]>>('/products'),
+    getCategories: () => api.get<ApiResponse<Category[]>>('/categories'),
     getOne: (id: number) =>
       api.get<ApiResponse<Product>>(`/products/${id}`),
     create: (data: FormData) =>
@@ -64,66 +69,30 @@ export const endpoints = {
     uploadImage: (productId: number, imageFile: File) => {
       const formData = new FormData()
       formData.append('image', imageFile)
-      return api.post<ApiResponse<string>>(`/products/${productId}/image`, formData)
-    },
-    getAllCategories: () =>
-      api.get<ApiResponse<Category[]>>('/products/categories'),
-  },
-
-  cart: {
-    get: () => 
-      api.get<ApiResponse<CartItem[]>>('/cart'),
-    addItem: (productId: number, quantity: number) =>
-      api.post<ApiResponse<CartItem>>('/cart', { productId, quantity }),
-    updateQuantity: (productId: number, quantity: number) =>
-      api.put<ApiResponse<CartItem>>(`/cart/${productId}`, { quantity }),
-    removeItem: (productId: number) =>
-      api.delete<ApiResponse<void>>(`/cart/${productId}`)
-  },
-
-  orders: {
-    create: () =>
-      api.post<ApiResponse<Order>>('/orders'),
-    getAll: () => 
-      api.get<ApiResponse<Order[]>>('/orders'),
-    getOne: (id: number) => 
-      api.get<ApiResponse<Order>>(`/orders/${id}`),
-    cancel: (id: number) => 
-      api.post<ApiResponse<void>>(`/orders/${id}/cancel`)
-  },
-
-  admin: {
-    getAnalytics: () =>
-      api.get<ApiResponse<Analytics>>('/admin/analytics'),
-    getBanners: () =>
-      api.get<ApiResponse<Banner[]>>('/admin/banners'),
-    updateBanner: (id: number, data: Partial<Banner>) =>
-      api.put<ApiResponse<Banner>>(`/admin/banners/${id}`, data),
-    getOrders: () =>
-      api.get<ApiResponse<Order[]>>('/admin/orders'),
-    updateOrderStatus: (orderId: number, status: string) =>
-      api.put<ApiResponse<Order>>(`/admin/orders/${orderId}/status`, { status }),
-    getAboutContent: () =>
-      api.get<ApiResponse<string>>('/admin/about'),
-    updateAboutContent: (content: string) =>
-      api.put<ApiResponse<void>>('/admin/about', { content }),
-  },
-
-  banners: {
-    getActive: () =>
-      api.get<ApiResponse<Banner>>('/banners/active'),
-    getAll: () =>
-      api.get<ApiResponse<Banner[]>>('/banners')
+      return api.post<ApiResponse<string>>(`/products/${productId}/upload-image`, formData)
+    }
   },
 
   wishlist: {
-    getAll: () => 
-      api.get<ApiResponse<Product[]>>('/wishlist'),
-    add: (productId: number) => 
-      api.post<ApiResponse<void>>('/wishlist', { productId }),
-    remove: (productId: number) => 
-      api.delete<ApiResponse<void>>(`/wishlist/${productId}`)
-  }
+    getAll: () => api.get<ApiResponse<Product[]>>('/wishlist'),
+    add: (productId: number) => api.post<ApiResponse<void>>('/wishlist', { productId }),
+    remove: (productId: number) => api.delete<ApiResponse<void>>(`/wishlist/${productId}`),
+  },
+
+  banners: {
+    getActive: () => api.get<ApiResponse<Banner>>('/banners/active'),
+    getAll: () => api.get<ApiResponse<Banner[]>>('/admin/banners'),
+  },
+
+  admin: {
+    getAboutContent: () => api.get<ApiResponse<string>>('/admin/about'),
+    updateAboutContent: (content: string) => api.put<ApiResponse<void>>('/admin/about', { content }),
+    getOrders: () => api.get<ApiResponse<Order[]>>('/admin/orders'),
+    updateOrderStatus: (orderId: number, status: string) => 
+      api.put<ApiResponse<void>>(`/admin/orders/${orderId}/status`, { status }),
+    getAnalytics: () => api.get<ApiResponse<Analytics>>('/admin/analytics'),
+  },
 }
 
-export default endpoints
+export default api
+

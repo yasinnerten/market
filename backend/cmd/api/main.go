@@ -9,6 +9,7 @@ import (
 	"github.com/yasinnerten/market/internal/logger"
 	"github.com/yasinnerten/market/internal/middleware"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
 func main() {
@@ -23,7 +24,7 @@ func main() {
 	}
 
 	// Create admin user if not exists
-	if err := db.CreateAdminUser(); err != nil {
+	if err := db.InitializeAdmin(database); err != nil {
 		logger.Fatal("Failed to create admin user", zap.Error(err))
 	}
 
@@ -40,17 +41,22 @@ func main() {
 	cartHandler := handler.NewCartHandler(database)
 	orderHandler := handler.NewOrderHandler(database)
 	adminHandler := handler.NewAdminHandler(database)
+	bannerHandler := handler.NewBannerHandler(database)
 
 	// Health check route
 	router.GET("/health", healthHandler.Check)
 
-	// Public routes
-	router.POST("/register", authHandler.Register)
-	router.POST("/login", authHandler.Login)
+	// Auth routes
+	auth := router.Group("/api/auth")
+	{
+		auth.POST("/login", authHandler.Login)
+		auth.POST("/register", authHandler.Register)
+		auth.GET("/me", middleware.AuthRequired(), authHandler.Me)
+	}
 
 	// Product routes
-	router.GET("/products", productHandler.List)
-	router.GET("/products/:id", productHandler.Get)
+	router.GET("/api/products", productHandler.List)
+	router.GET("/api/products/:id", productHandler.Get)
 
 	// Protected routes
 	protected := router.Group("")
@@ -83,7 +89,16 @@ func main() {
 		// Content management
 		admin.GET("/about", adminHandler.GetAboutContent)
 		admin.PUT("/about", adminHandler.UpdateAboutContent)
+
+		// Banner management
+		admin.GET("/banners", bannerHandler.GetAll)
+		admin.POST("/banners", bannerHandler.Create)
+		admin.PUT("/banners/:id", bannerHandler.Update)
+		admin.DELETE("/banners/:id", bannerHandler.Delete)
 	}
+
+	// Public banner routes
+	router.GET("/banners/active", bannerHandler.GetActive)
 
 	// Start server
 	port := os.Getenv("PORT")
@@ -95,4 +110,15 @@ func main() {
 	if err := router.Run(":" + port); err != nil {
 		logger.Fatal("Failed to start server", zap.Error(err))
 	}
+}
+
+func setupRoutes(r *gin.Engine, db *gorm.DB) {
+	// Initialize handlers
+	productHandler := handler.NewProductHandler(db)
+
+	// Public routes
+	r.GET("/api/products", productHandler.List)
+	r.GET("/api/products/:id", productHandler.Get)
+
+	// ... rest of route setup ...
 }

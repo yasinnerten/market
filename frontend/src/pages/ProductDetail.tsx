@@ -44,7 +44,7 @@ const ProductDetail = () => {
         {/* Product Image */}
         <div className="aspect-square">
           <img
-            src={product.image || '/placeholder.png'}
+            src={product.imageUrl || '/placeholder.png'}
             alt={product.name}
             className="w-full h-full object-cover rounded-lg"
           />

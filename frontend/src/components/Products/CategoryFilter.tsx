@@ -14,7 +14,7 @@ const CategoryFilter = () => {
 
   const { data: categories, isLoading } = useApiQuery<Category[]>(
     ['categories'],
-    () => endpoints.products.getAllCategories().then(res => res.data)
+    () => endpoints.products.getCategories().then(res => res.data)
   )
 
   const handleCategoryClick = (slug: string | null) => {

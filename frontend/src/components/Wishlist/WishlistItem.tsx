@@ -13,7 +13,7 @@ export default function WishlistItem({ product }: WishlistItemProps) {
   return (
     <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow">
       <img
-        src={product.image}
+        src={product.imageUrl}
         alt={product.name}
         className="w-24 h-24 object-cover rounded"
       />

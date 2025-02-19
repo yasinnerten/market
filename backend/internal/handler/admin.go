@@ -23,15 +23,15 @@ func NewAdminHandler(db *gorm.DB) *AdminHandler {
 // Middleware to check admin rights
 func (h *AdminHandler) AdminRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		user, exists := c.Get("user")
+		userInterface, exists := c.Get("user")
 		if !exists {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authentication required"})
 			c.Abort()
 			return
 		}
 
-		adminUser, ok := user.(*model.AdminUser)
-		if !ok || !adminUser.IsAdmin {
+		user, ok := userInterface.(*model.User)
+		if !ok || user.Role != "admin" {
 			c.JSON(http.StatusForbidden, gin.H{"error": "Admin rights required"})
 			c.Abort()
 			return

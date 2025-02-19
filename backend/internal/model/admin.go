@@ -1,21 +1,17 @@
 package model
 
-import "gorm.io/gorm"
+import "time"
 
+// AboutContent represents the about page content
 type AboutContent struct {
-	gorm.Model
-	Content string `json:"content"`
+	ID        uint      `gorm:"primarykey" json:"id"`
+	Content   string    `json:"content"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type AdminUser struct {
-	gorm.Model
-	Email    string `json:"email" gorm:"unique"`
-	Password string `json:"-"` // Password hash
-	IsAdmin  bool   `json:"is_admin" gorm:"default:false"`
-}
-
-// Initial admin credentials will be set via environment variables
+// Initial admin credentials
 const (
-	DefaultAdminEmail    = "admin@market.com"
-	DefaultAdminPassword = "admin123" // This should be changed after first login
+	DefaultAdminEmail    = "yasinnerten@hotmail.com"
+	DefaultAdminPassword = "Deneme01"
 )

@@ -11,7 +11,7 @@ const CartItem = ({ item }: CartItemProps) => {
   return (
     <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow">
       <img
-        src={item.product.image}
+        src={item.product.imageUrl}
         alt={item.product.name}
         className="w-24 h-24 object-cover rounded"
       />
