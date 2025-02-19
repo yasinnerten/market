@@ -40,17 +40,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const login = async (email: string, password: string) => {
-    const response = await endpoints.auth.login({ email, password });
-    const { token, user } = response.data.data;
-    localStorage.setItem('token', token);
-    setUser(user);
+    try {
+      const { data } = await endpoints.auth.login({ email, password });
+      localStorage.setItem('token', data.token);
+      setUser(data.user);
+    } catch (error: any) {
+      throw new Error(error.message || 'Login failed');
+    }
   };
 
   const register = async (name: string, email: string, password: string) => {
-    const response = await endpoints.auth.register({ name, email, password });
-    const { token, user } = response.data.data;
-    localStorage.setItem('token', token);
-    setUser(user);
+    try {
+      const { data } = await endpoints.auth.register({ name, email, password });
+      localStorage.setItem('token', data.token);
+      setUser(data.user);
+    } catch (error: any) {
+      throw new Error(error.message || 'Registration failed');
+    }
   };
 
   const logout = () => {

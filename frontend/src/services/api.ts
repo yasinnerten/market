@@ -44,9 +44,9 @@ api.interceptors.response.use(
 export const endpoints = {
   auth: {
     login: (data: LoginInput) => 
-      api.post<ApiResponse<AuthResponse>>('/auth/login', data),
+      api.post<AuthResponse>('/auth/login', data),
     register: (data: RegisterInput) => 
-      api.post<ApiResponse<AuthResponse>>('/auth/register', data),
+      api.post<AuthResponse>('/auth/register', data),
     logout: () => {
       localStorage.removeItem('token');
       return api.post('/auth/logout');

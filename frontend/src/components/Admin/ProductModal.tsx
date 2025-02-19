@@ -42,8 +42,8 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
             return endpoints.products.create(data);
         },
         onSuccess: async (response) => {
-            if (imageFile && response.data.id) {
-                await endpoints.products.uploadImage(Number(response.data.id), imageFile);
+            if (imageFile && response.data.data.id) {
+                await endpoints.products.uploadImage(Number(response.data.data.id), imageFile);
             }
             queryClient.invalidateQueries({ queryKey: ['admin-products'] });
             onClose();

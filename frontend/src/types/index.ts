@@ -106,7 +106,6 @@ export interface Banner extends BaseModel {
 
 // API Response interfaces
 export interface ApiResponse<T> {
-  id: File | null
   data: T
   message?: string
 }
